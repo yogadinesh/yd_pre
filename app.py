@@ -21,7 +21,8 @@ def load_model():
 
     generator = pipeline(
         "text-generation",
-        model="distilgpt2"
+        #model="distilgpt2"
+        model="google/flan-t5-small"
     )
 
     return generator
