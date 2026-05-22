@@ -19,14 +19,14 @@ st.write("Analyze cybersecurity logs using AI")
 @st.cache_resource
 def load_model():
 
-    model = pipeline(
-        task="text2text-generation",
-        model="google/flan-t5-base"
+    generator = pipeline(
+        "text-generation",
+        model="distilgpt2"
     )
 
-    return model
+    return generator
 
-# Create generator object
+# Load AI model
 generator = load_model()
 
 # ---------------- USER INPUT ----------------
@@ -34,7 +34,7 @@ generator = load_model()
 logs = st.text_area(
     "Enter Security Logs",
     height=250,
-    placeholder="Paste security logs here..."
+    placeholder="Paste cybersecurity logs here..."
 )
 
 # ---------------- BUTTON ----------------
@@ -47,32 +47,30 @@ if st.button("Analyze Incident"):
 
     else:
 
-        # Prompt
         prompt = f"""
-Analyze the following cybersecurity logs.
+Cybersecurity Incident Analysis
 
 Logs:
 {logs}
 
 Provide:
-1. Suspicious activities
-2. Attack type
-3. Severity
-4. Mitigation
-5. Prevention
+- suspicious activities
+- attack type
+- severity
+- mitigation
+- prevention
 """
 
-        # AI Processing
         with st.spinner("🔍 Analyzing Incident..."):
 
             response = generator(
                 prompt,
-                max_length=200
+                max_length=150,
+                num_return_sequences=1
             )
 
             result = response[0]["generated_text"]
 
-        # Output
         st.subheader("📊 Incident Analysis Report")
 
         st.success("✅ Analysis Completed")
