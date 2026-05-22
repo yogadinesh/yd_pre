@@ -9,7 +9,7 @@ st.write("Analyze cybersecurity logs using Chain-of-Thought Prompting")
 
 # OpenAI Client
 client = OpenAI(
-    api_key=st.secrets["OPENAI_API_KEY"]
+    api_key=st.secrets["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"]
 )
 
 # User Input
