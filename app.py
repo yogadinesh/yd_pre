@@ -18,17 +18,19 @@ st.write(
 
 # ---------------- LOAD MODEL ----------------
 
+
+
+
 @st.cache_resource
 def load_model():
 
     generator = pipeline(
-       task="text2text-generation"
+        task="text2text-generation",
         model="google/flan-t5-base"
     )
 
     return generator
-
-generator = load_model()
+    generator = load_model()
 
 # ---------------- USER INPUT ----------------
 
