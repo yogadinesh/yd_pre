@@ -23,7 +23,7 @@ def load_model():
 
     generator = pipeline(
         task="text-generation",
-        model="gpt2"
+        model="google/flan-t5-base"
     )
 
     return generator
