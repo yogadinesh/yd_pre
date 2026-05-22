@@ -3,4 +3,5 @@ torch
 accelerate
 sentencepiece
 openai
-transformers==4.30.2
+transformers>=4.35.0
+
