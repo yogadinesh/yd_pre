@@ -1,5 +1,5 @@
 import streamlit as st
-from openai import OpenAI
+import openai
 
 # Page Config
 st.set_page_config(page_title="Cybersecurity Incident Analyzer")
@@ -7,10 +7,8 @@ st.set_page_config(page_title="Cybersecurity Incident Analyzer")
 st.title("🔐 GenAI Cybersecurity Incident Analyzer")
 st.write("Analyze cybersecurity logs using Chain-of-Thought Prompting")
 
-# OpenAI Client
-client = OpenAI(
-    api_key="YOUR_OPENAI_API_KEY"
-)
+# API Key
+openai.api_key = "YOUR_OPENAI_API_KEY"
 
 # User Input
 logs = st.text_area(
@@ -48,8 +46,8 @@ Generate a professional cybersecurity incident report.
 
         with st.spinner("Analyzing Incident..."):
 
-            response = client.chat.completions.create(
-                model="gpt-4o-mini",
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
                 messages=[
                     {
                         "role": "system",
@@ -63,7 +61,7 @@ Generate a professional cybersecurity incident report.
                 temperature=0.3
             )
 
-            result = response.choices[0].message.content
+            result = response["choices"][0]["message"]["content"]
 
         st.subheader("📊 Incident Analysis Report")
         st.write(result)
