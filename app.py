@@ -1,36 +1,60 @@
 import streamlit as st
-from openai import OpenAI
+from transformers import pipeline
 
-# Page Config
-st.set_page_config(page_title="Cybersecurity Incident Analyzer")
+# ---------------- PAGE CONFIG ----------------
 
-st.title("🔐 GenAI Cybersecurity Incident Analyzer")
-st.write("Analyze cybersecurity logs using Chain-of-Thought Prompting")
-
-# OpenAI Client
-client = OpenAI(
-    api_key="YOUR_OPENAI_API_KEY"
+st.set_page_config(
+    page_title="Cybersecurity Incident Analyzer",
+    page_icon="🔐",
+    layout="centered"
 )
 
-# User Input
+# ---------------- TITLE ----------------
+
+st.title("🔐YOGADINESH APP of GenAI Cybersecurity Incident Analyzer")
+
+st.write(
+    "Analyze cybersecurity logs using Generative AI and Chain-of-Thought Prompting"
+)
+
+# ---------------- LOAD MODEL ----------------
+
+@st.cache_resource
+def load_model():
+
+    generator = pipeline(
+        "text2text-generation",
+        model="google/flan-t5-base"
+    )
+
+    return generator
+
+generator = load_model()
+
+# ---------------- USER INPUT ----------------
+
 logs = st.text_area(
     "Enter Security Logs",
     height=250,
-    placeholder="Paste security logs here..."
+    placeholder="Paste cybersecurity logs here..."
 )
 
-# Analyze Button
+# ---------------- ANALYZE BUTTON ----------------
+
 if st.button("Analyze Incident"):
 
+    # Empty input check
     if logs.strip() == "":
-        st.warning("Please enter security logs.")
+
+        st.warning("⚠️ Please enter security logs.")
 
     else:
 
+        # Prompt Engineering
         prompt = f"""
 You are an expert cybersecurity SOC analyst.
 
-Analyze the following logs step-by-step.
+Analyze the following security logs step-by-step.
 
 Tasks:
 1. Identify suspicious activities
@@ -46,24 +70,19 @@ Security Logs:
 Generate a professional cybersecurity incident report.
 """
 
-        with st.spinner("Analyzing Incident..."):
+        # Loading Spinner
+        with st.spinner("🔍 Analyzing Incident..."):
 
-            response = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {
-                        "role": "system",
-                        "content": "You are a professional cybersecurity analyst."
-                    },
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
-                ],
-                temperature=0.3
+            response = generator(
+                prompt,
+                max_length=300
             )
 
-            result = response.choices[0].message.content
+            result = response[0]["generated_text"]
 
+        # Display Output
         st.subheader("📊 Incident Analysis Report")
+
+        st.success("✅ Analysis Completed")
+
         st.write(result)
