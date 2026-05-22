@@ -22,7 +22,7 @@ st.write(
 def load_model():
 
     generator = pipeline(
-       task="text2text-generation"
+       task="text2text-generation",
         model="google/flan-t5-base"
     )
 
