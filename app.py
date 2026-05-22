@@ -5,16 +5,15 @@ from transformers import pipeline
 
 st.set_page_config(
     page_title="Cybersecurity Incident Analyzer",
-    page_icon="🔐",
-    layout="centered"
+    page_icon="🔐"
 )
 
 # ---------------- TITLE ----------------
 
-st.title("🔐YOGADINESH APP of GenAI Cybersecurity Incident Analyzer")
+st.title("🔐 GenAI Cybersecurity Incident Analyzer")
 
 st.write(
-    "Analyze cybersecurity logs using Generative AI and Chain-of-Thought Prompting"
+    "Analyze cybersecurity logs using AI"
 )
 
 # ---------------- LOAD MODEL ----------------
@@ -23,8 +22,8 @@ st.write(
 def load_model():
 
     generator = pipeline(
-        "text2text-generation",
-        model="google/flan-t5-base"
+        task="text-generation",
+        model="gpt2"
     )
 
     return generator
@@ -39,48 +38,41 @@ logs = st.text_area(
     placeholder="Paste cybersecurity logs here..."
 )
 
-# ---------------- ANALYZE BUTTON ----------------
+# ---------------- BUTTON ----------------
 
 if st.button("Analyze Incident"):
 
-    # Empty input check
     if logs.strip() == "":
 
         st.warning("⚠️ Please enter security logs.")
 
     else:
 
-        # Prompt Engineering
         prompt = f"""
-You are an expert cybersecurity SOC analyst.
+Cybersecurity Incident Report
 
-Analyze the following security logs step-by-step.
+Analyze these logs:
 
-Tasks:
-1. Identify suspicious activities
-2. Detect attack patterns
-3. Determine severity level
-4. Identify affected systems
-5. Suggest mitigation strategies
-6. Recommend prevention methods
-
-Security Logs:
 {logs}
 
-Generate a professional cybersecurity incident report.
+Identify:
+- suspicious activities
+- attack type
+- severity
+- mitigation
+- prevention
 """
 
-        # Loading Spinner
         with st.spinner("🔍 Analyzing Incident..."):
 
             response = generator(
                 prompt,
-                max_length=300
+                max_length=200,
+                num_return_sequences=1
             )
 
             result = response[0]["generated_text"]
 
-        # Display Output
         st.subheader("📊 Incident Analysis Report")
 
         st.success("✅ Analysis Completed")
