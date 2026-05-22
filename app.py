@@ -30,7 +30,7 @@ def load_model():
     )
 
     return generator
-    generator = load_model()
+    #generator = load_model()
 
 # ---------------- USER INPUT ----------------
 
