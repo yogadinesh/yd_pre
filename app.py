@@ -12,32 +12,29 @@ st.set_page_config(
 
 st.title("🔐 GenAI Cybersecurity Incident Analyzer")
 
-st.write(
-    "Analyze cybersecurity logs using AI"
-)
+st.write("Analyze cybersecurity logs using AI")
 
 # ---------------- LOAD MODEL ----------------
-
-
-
 
 @st.cache_resource
 def load_model():
 
-    generator = pipeline(
+    model = pipeline(
         task="text2text-generation",
         model="google/flan-t5-base"
     )
 
-    return generator
-    generator = load_model()
+    return model
+
+# Create generator object
+generator = load_model()
 
 # ---------------- USER INPUT ----------------
 
 logs = st.text_area(
     "Enter Security Logs",
     height=250,
-    placeholder="Paste cybersecurity logs here..."
+    placeholder="Paste security logs here..."
 )
 
 # ---------------- BUTTON ----------------
@@ -50,31 +47,32 @@ if st.button("Analyze Incident"):
 
     else:
 
+        # Prompt
         prompt = f"""
-Cybersecurity Incident Report
+Analyze the following cybersecurity logs.
 
-Analyze these logs:
-
+Logs:
 {logs}
 
-Identify:
-- suspicious activities
-- attack type
-- severity
-- mitigation
-- prevention
+Provide:
+1. Suspicious activities
+2. Attack type
+3. Severity
+4. Mitigation
+5. Prevention
 """
 
+        # AI Processing
         with st.spinner("🔍 Analyzing Incident..."):
 
             response = generator(
                 prompt,
-                max_length=200,
-                num_return_sequences=1
+                max_length=200
             )
 
             result = response[0]["generated_text"]
 
+        # Output
         st.subheader("📊 Incident Analysis Report")
 
         st.success("✅ Analysis Completed")
